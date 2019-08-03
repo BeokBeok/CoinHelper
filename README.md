@@ -1,5 +1,10 @@
 # GoogryAndroidArchitecutreStudy
 
+## 스터디장
+- 정석준 [sjjeong](https://github.com/sjjeong)
+[공간](https://github.com/StudyFork/GoogryAndroidArchitectureStudy/tree/master/sjjeong)
+
+## 커리큘럼 (완료)
 1주차 OT
 - 아키텍쳐 패턴의 소개
 - 패턴을 사용하는 목적
@@ -42,7 +47,3 @@
 * 과제 -> Koin 적용
 
 9주차 과제 검토 및 회고
-
-## 스터디장
-- 정석준 [sjjeong](https://github.com/sjjeong)
-[공간](https://github.com/StudyFork/GoogryAndroidArchitectureStudy/tree/master/sjjeong)
