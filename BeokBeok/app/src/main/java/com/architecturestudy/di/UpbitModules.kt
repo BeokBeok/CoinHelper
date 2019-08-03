@@ -2,6 +2,7 @@ package com.architecturestudy.di
 
 import androidx.room.Room
 import com.architecturestudy.BuildConfig
+import com.architecturestudy.data.source.UpbitDataSource
 import com.architecturestudy.data.source.UpbitRepository
 import com.architecturestudy.data.source.local.UpbitDatabase
 import com.architecturestudy.data.source.local.UpbitLocalDataSource
@@ -12,22 +13,28 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.viewmodel.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
-val viewModelModules = module {
-    viewModel { UpbitViewModel(get()) }
+val viewModelModule = module {
+    viewModel { UpbitViewModel(get(named("repository"))) }
 }
 
-val dataSourceModules = module {
-    single { UpbitRepository(get(), get()) }
-    single { UpbitLocalDataSource(get()) }
-    single { UpbitRemoteDataSource(get()) }
+val dataSourceModule = module {
+    single<UpbitDataSource>(named("repository")) {
+        UpbitRepository(
+            get(named("local")),
+            get(named("remote"))
+        )
+    }
+    single<UpbitDataSource>(named("local")) { UpbitLocalDataSource(get()) }
+    single<UpbitDataSource>(named("remote")) { UpbitRemoteDataSource(get()) }
 }
 
-fun getRemoteServiceModules(url: String) = module {
+fun getRemoteServiceModule(url: String) = module {
     single {
         HttpLoggingInterceptor().apply {
             level = if (BuildConfig.DEBUG) {
@@ -53,10 +60,9 @@ fun getRemoteServiceModules(url: String) = module {
             .build()
     }
     single { get<Retrofit>().create(UpbitRemoteService::class.java) }
-
 }
 
-fun getLocalServiceModules() = module {
+fun getLocalServiceModule() = module {
     single {
         Room.databaseBuilder(
             androidApplication(),

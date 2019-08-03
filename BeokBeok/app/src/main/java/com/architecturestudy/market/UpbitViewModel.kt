@@ -2,12 +2,12 @@ package com.architecturestudy.market
 
 import androidx.lifecycle.MutableLiveData
 import com.architecturestudy.base.BaseViewModel
-import com.architecturestudy.data.source.UpbitRepository
+import com.architecturestudy.data.source.UpbitDataSource
 import com.architecturestudy.util.NumberFormatter
 import com.architecturestudy.util.RxEventBus
 
 class UpbitViewModel(
-    private val upBitRepository: UpbitRepository
+    private val upBitRepository: UpbitDataSource
 ) : BaseViewModel() {
 
     val marketPriceList = MutableLiveData<List<Map<String, String>>>()

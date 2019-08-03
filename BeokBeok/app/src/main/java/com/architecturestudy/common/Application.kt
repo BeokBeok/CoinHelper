@@ -1,10 +1,10 @@
 package com.architecturestudy.common
 
 import android.app.Application
-import com.architecturestudy.di.dataSourceModules
-import com.architecturestudy.di.getLocalServiceModules
-import com.architecturestudy.di.getRemoteServiceModules
-import com.architecturestudy.di.viewModelModules
+import com.architecturestudy.di.dataSourceModule
+import com.architecturestudy.di.getLocalServiceModule
+import com.architecturestudy.di.getRemoteServiceModule
+import com.architecturestudy.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -19,10 +19,10 @@ class Application : Application() {
             androidContext(this@Application)
             modules(
                 listOf(
-                    getLocalServiceModules(),
-                    getRemoteServiceModules("https://api.upbit.com/"),
-                    dataSourceModules,
-                    viewModelModules
+                    viewModelModule,
+                    dataSourceModule,
+                    getLocalServiceModule(),
+                    getRemoteServiceModule("https://api.upbit.com/")
                 )
             )
         }

@@ -8,7 +8,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 class UpbitLocalDataSource(
-    private val upbitTickerDao: UpbitTickerDao?
+    private val upbitTickerDao: UpbitTickerDao
 ) : UpbitDataSource {
 
     override fun getMarketPrice(
@@ -18,7 +18,7 @@ class UpbitLocalDataSource(
     ): Disposable = throw IllegalStateException("Not validate call")
 
     override fun saveTicker(upbitTicker: UpbitTicker): Disposable? = Observable.fromCallable {
-        upbitTickerDao?.run {
+        upbitTickerDao.run {
             insertTicker(upbitTicker)
         }
     }.subscribeOn(Schedulers.io())
@@ -35,31 +35,31 @@ class UpbitLocalDataSource(
             when (sortType) {
                 "market" -> {
                     if (isDesc) {
-                        upbitTickerDao?.sortMarketByDESC()
+                        upbitTickerDao.sortMarketByDESC()
                     } else {
-                        upbitTickerDao?.sortMarket()
+                        upbitTickerDao.sortMarket()
                     }
                 }
                 "trade_price" -> {
                     if (isDesc) {
-                        upbitTickerDao?.sortTradePriceByDESC()
+                        upbitTickerDao.sortTradePriceByDESC()
                     } else {
-                        upbitTickerDao?.sortTradePrice()
+                        upbitTickerDao.sortTradePrice()
                     }
                 }
                 "signed_change_rate" -> {
                     if (isDesc) {
-                        upbitTickerDao?.sortSignedChangeRateByDESC()
+                        upbitTickerDao.sortSignedChangeRateByDESC()
                     } else {
-                        upbitTickerDao?.sortSignedChangeRate()
+                        upbitTickerDao.sortSignedChangeRate()
                     }
 
                 }
                 "acc_trade_price_24h" -> {
                     if (isDesc) {
-                        upbitTickerDao?.sortAccTradePrice24hByDESC()
+                        upbitTickerDao.sortAccTradePrice24hByDESC()
                     } else {
-                        upbitTickerDao?.sortAccTradePrice24h()
+                        upbitTickerDao.sortAccTradePrice24h()
                     }
                 }
                 else -> listOf()
