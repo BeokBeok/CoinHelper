@@ -11,7 +11,6 @@ import com.architecturestudy.databinding.FragmentUpbitContentsBinding
 import com.architecturestudy.databinding.RvUpbitItemBinding
 import com.architecturestudy.util.RxEventBus
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -49,7 +48,7 @@ class UpbitContentsFragment : BaseFragment<FragmentUpbitContentsBinding, UpbitVi
                     showToast(throwable.message)
                 }
             )
-            CompositeDisposable().add(
+            it.addDisposable(
                 RxEventBus.getEvents()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
