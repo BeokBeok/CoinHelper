@@ -18,14 +18,9 @@ class UpbitRemoteDataSource(
     ): Disposable =
         retrofit.getMarkets()
             .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                val markets = it.body()
-                if (markets.isNullOrEmpty()) {
-                    onFail(IllegalStateException("Data not validate"))
-                } else {
-                    val tickers = markets
-                        .asSequence()
+            .flatMap {
+                retrofit.getTicker(
+                    it.asSequence()
                         .filter {
                             enumValues<MarketTypes>().any { data ->
                                 data.name == prefix
@@ -34,31 +29,14 @@ class UpbitRemoteDataSource(
                         .filter { data -> data.market.startsWith(prefix) }
                         .map { data -> data.market }
                         .toList()
-                    getTickers(
-                        tickers,
-                        onSuccess,
-                        onFail
-                    )
-                }
-            }, {
-                onFail(it)
-            })
-
-    private fun getTickers(
-        tickers: List<String?>?,
-        onSuccess: (List<UpbitTicker>) -> Unit,
-        onFail: (Throwable) -> Unit
-    ): Disposable = retrofit.getTicker(tickers)
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe({
-            val responseTicker = it.body()
-            if (responseTicker.isNullOrEmpty()) {
-                onFail(IllegalStateException("Data is empty"))
-            } else {
-                onSuccess(responseTicker)
+                )
             }
-        }, {
-            onFail(it)
-        })
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                if (it.isNullOrEmpty()) {
+                    onFail(IllegalStateException("Data is empty"))
+                } else {
+                    onSuccess(it)
+                }
+            }, { onFail(it) })
 }
