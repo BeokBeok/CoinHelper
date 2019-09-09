@@ -2,12 +2,12 @@ package com.architecturestudy.market
 
 import androidx.lifecycle.MutableLiveData
 import com.architecturestudy.base.BaseViewModel
-import com.architecturestudy.data.source.UpbitDataSource
+import com.architecturestudy.data.source.UpbitRepository
 import com.architecturestudy.util.NumberFormatter
 import com.architecturestudy.util.RxEventBus
 
 class UpbitViewModel(
-    private val upBitRepository: UpbitDataSource
+    private val upBitRepository: UpbitRepository
 ) : BaseViewModel() {
 
     val marketPriceList = MutableLiveData<List<Map<String, String>>>()
@@ -22,8 +22,8 @@ class UpbitViewModel(
             upBitRepository.getMarketPrice(
                 prefix,
                 onSuccess = {
-                    for (i in 0 until it.size) {
-                        upBitRepository.saveTicker(it[i])
+                    for (element in it) {
+                        upBitRepository.saveTicker(element)
                     }
                     marketPriceList.value = NumberFormatter.convertTo(it)
                 },

@@ -4,9 +4,10 @@ import com.architecturestudy.data.UpbitTicker
 import io.reactivex.disposables.Disposable
 
 class UpbitRepository(
-    private val upbitLocalDataSource: UpbitDataSource,
-    private val upbitRemoteDataSource: UpbitDataSource
-) : UpbitDataSource {
+    private val upbitLocalDataSource: UpbitDataSource.Local,
+    private val upbitRemoteDataSource: UpbitDataSource.Remote
+) : UpbitDataSource.Local,
+    UpbitDataSource.Remote {
 
     override fun getMarketPrice(
         prefix: String,

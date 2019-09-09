@@ -9,7 +9,7 @@ import io.reactivex.schedulers.Schedulers
 
 class UpbitRemoteDataSource(
     private val retrofit: UpbitRemoteService
-) : UpbitDataSource {
+) : UpbitDataSource.Remote {
 
     override fun getMarketPrice(
         prefix: String,
@@ -43,16 +43,6 @@ class UpbitRemoteDataSource(
             }, {
                 onFail(it)
             })
-
-    override fun saveTicker(upbitTicker: UpbitTicker): Disposable? =
-        throw IllegalStateException("Not validate call")
-
-    override fun sort(
-        sortType: String,
-        isDesc: Boolean,
-        onSuccess: (List<UpbitTicker>) -> Unit,
-        onFail: (Throwable) -> Unit
-    ): Disposable = throw IllegalStateException("Not validate call")
 
     private fun getTickers(
         tickers: List<String?>?,

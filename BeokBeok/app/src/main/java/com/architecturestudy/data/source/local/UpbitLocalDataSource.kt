@@ -9,13 +9,7 @@ import io.reactivex.schedulers.Schedulers
 
 class UpbitLocalDataSource(
     private val upbitTickerDao: UpbitTickerDao
-) : UpbitDataSource {
-
-    override fun getMarketPrice(
-        prefix: String,
-        onSuccess: (List<UpbitTicker>) -> Unit,
-        onFail: (Throwable) -> Unit
-    ): Disposable = throw IllegalStateException("Not validate call")
+) : UpbitDataSource.Local {
 
     override fun saveTicker(upbitTicker: UpbitTicker): Disposable? = Observable.fromCallable {
         upbitTickerDao.run {

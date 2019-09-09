@@ -13,25 +13,19 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.viewmodel.dsl.viewModel
-import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 val viewModelModule = module {
-    viewModel { UpbitViewModel(get(named("repository"))) }
+    viewModel { UpbitViewModel(get()) }
 }
 
 val dataSourceModule = module {
-    single<UpbitDataSource>(named("repository")) {
-        UpbitRepository(
-            get(named("local")),
-            get(named("remote"))
-        )
-    }
-    single<UpbitDataSource>(named("local")) { UpbitLocalDataSource(get()) }
-    single<UpbitDataSource>(named("remote")) { UpbitRemoteDataSource(get()) }
+    single { UpbitRepository(get(), get()) }
+    single<UpbitDataSource.Local> { UpbitLocalDataSource(get()) }
+    single<UpbitDataSource.Remote> { UpbitRemoteDataSource(get()) }
 }
 
 fun getRemoteServiceModule(url: String) = module {
