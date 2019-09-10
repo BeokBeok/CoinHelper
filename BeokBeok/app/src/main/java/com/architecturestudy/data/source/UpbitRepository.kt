@@ -9,27 +9,27 @@ class UpbitRepository(
 ) : UpbitDataSource.Local,
     UpbitDataSource.Remote {
 
+    override suspend fun saveTicker(upbitTicker: UpbitTicker) =
+        upbitLocalDataSource.saveTicker(upbitTicker)
+
+    override suspend fun sort(
+        sortType: String,
+        isDesc: Boolean,
+        onSuccess: (List<UpbitTicker>) -> Unit,
+        onFail: (Throwable) -> Unit
+    ) = upbitLocalDataSource.sort(
+        sortType,
+        isDesc,
+        onSuccess,
+        onFail
+    )
+
     override fun getMarketPrice(
         prefix: String,
         onSuccess: (List<UpbitTicker>) -> Unit,
         onFail: (Throwable) -> Unit
     ): Disposable = upbitRemoteDataSource.getMarketPrice(
         prefix,
-        onSuccess,
-        onFail
-    )
-
-    override fun saveTicker(upbitTicker: UpbitTicker): Disposable? =
-        upbitLocalDataSource.saveTicker(upbitTicker)
-
-    override fun sort(
-        sortType: String,
-        isDesc: Boolean,
-        onSuccess: (List<UpbitTicker>) -> Unit,
-        onFail: (Throwable) -> Unit
-    ): Disposable? = upbitLocalDataSource.sort(
-        sortType,
-        isDesc,
         onSuccess,
         onFail
     )

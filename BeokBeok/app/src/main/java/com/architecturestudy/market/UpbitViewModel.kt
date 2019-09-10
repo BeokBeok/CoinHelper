@@ -1,10 +1,12 @@
 package com.architecturestudy.market
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.architecturestudy.base.BaseViewModel
 import com.architecturestudy.data.source.UpbitRepository
 import com.architecturestudy.util.NumberFormatter
 import com.architecturestudy.util.RxEventBus
+import kotlinx.coroutines.launch
 
 class UpbitViewModel(
     private val upBitRepository: UpbitRepository
@@ -18,37 +20,35 @@ class UpbitViewModel(
     private var isDESC: Boolean = false
 
     fun showMarketPrice(prefix: String) {
-        addDisposable(
-            upBitRepository.getMarketPrice(
-                prefix,
-                onSuccess = {
+        upBitRepository.getMarketPrice(
+            prefix,
+            onSuccess = {
+                viewModelScope.launch {
                     for (element in it) {
                         upBitRepository.saveTicker(element)
                     }
                     marketPriceList.value = NumberFormatter.convertTo(it)
-                },
-                onFail = {
-                    errMsg.value = it
                 }
-            )
+            },
+            onFail = {
+                errMsg.value = it
+            }
         )
     }
 
-    fun sort(sortType: String) {
+    fun sort(sortType: String) = viewModelScope.launch {
         setSelectedTypeList(sortType)
         isSortByDESC.value = isDESC
-        addDisposable(
-            upBitRepository.sort(
-                sortType,
-                isDESC,
-                onSuccess = {
-                    RxEventBus.sendEvent(NumberFormatter.convertTo(it))
-                    isDESC = !isDESC
-                },
-                onFail = {
-                    RxEventBus.sendEvent(it)
-                }
-            )
+        upBitRepository.sort(
+            sortType,
+            isDESC,
+            onSuccess = {
+                RxEventBus.sendEvent(NumberFormatter.convertTo(it))
+                isDESC = !isDESC
+            },
+            onFail = {
+                RxEventBus.sendEvent(it)
+            }
         )
     }
 

@@ -5,14 +5,14 @@ import io.reactivex.disposables.Disposable
 
 interface UpbitDataSource {
     interface Local {
-        fun saveTicker(upbitTicker: UpbitTicker): Disposable?
+        suspend fun saveTicker(upbitTicker: UpbitTicker)
 
-        fun sort(
+        suspend fun sort(
             sortType: String,
             isDesc: Boolean,
             onSuccess: (List<UpbitTicker>) -> Unit,
             onFail: (Throwable) -> Unit
-        ): Disposable?
+        )
     }
 
     interface Remote {
