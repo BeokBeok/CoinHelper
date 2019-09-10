@@ -10,30 +10,30 @@ import com.architecturestudy.data.UpbitTicker
 interface UpbitTickerDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertTicker(ticker: UpbitTicker)
+    suspend fun insertTicker(ticker: UpbitTicker)
 
     @Query("SELECT * FROM upbitTicker ORDER BY market")
-    fun sortMarket(): List<UpbitTicker>
+    suspend fun sortMarket(): List<UpbitTicker>
 
     @Query("SELECT * FROM upbitTicker ORDER BY market DESC")
-    fun sortMarketByDESC(): List<UpbitTicker>
+    suspend fun sortMarketByDESC(): List<UpbitTicker>
 
     @Query("SELECT * FROM upbitticker ORDER BY trade_price")
-    fun sortTradePrice(): List<UpbitTicker>
+    suspend fun sortTradePrice(): List<UpbitTicker>
 
     @Query("SELECT * FROM upbitTicker ORDER BY trade_price DESC")
-    fun sortTradePriceByDESC(): List<UpbitTicker>
+    suspend fun sortTradePriceByDESC(): List<UpbitTicker>
 
     @Query("SELECT * FROM upbitTicker ORDER BY signed_change_rate")
-    fun sortSignedChangeRate(): List<UpbitTicker>
+    suspend fun sortSignedChangeRate(): List<UpbitTicker>
 
     @Query("SELECT * FROM upbitTicker ORDER BY signed_change_rate DESC")
-    fun sortSignedChangeRateByDESC(): List<UpbitTicker>
+    suspend fun sortSignedChangeRateByDESC(): List<UpbitTicker>
 
     @Query("SELECT * FROM upbitTicker ORDER BY acc_trade_price_24h")
-    fun sortAccTradePrice24h(): List<UpbitTicker>
+    suspend fun sortAccTradePrice24h(): List<UpbitTicker>
 
     @Query("SELECT * FROM upbitTicker ORDER BY acc_trade_price_24h DESC")
-    fun sortAccTradePrice24hByDESC(): List<UpbitTicker>
+    suspend fun sortAccTradePrice24hByDESC(): List<UpbitTicker>
 
 }
