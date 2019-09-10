@@ -2,16 +2,14 @@ package com.architecturestudy.data.source.local
 
 import com.architecturestudy.data.UpbitTicker
 import com.architecturestudy.data.source.UpbitDataSource
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class UpbitLocalDataSource(
-    private val upbitTickerDao: UpbitTickerDao,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val upbitTickerDao: UpbitTickerDao
 ) : UpbitDataSource.Local {
 
-    override suspend fun saveTicker(upbitTicker: UpbitTicker) = withContext(ioDispatcher) {
+    override suspend fun saveTicker(upbitTicker: UpbitTicker) = withContext(Dispatchers.IO) {
         upbitTickerDao.insertTicker(upbitTicker)
     }
 
@@ -20,7 +18,7 @@ class UpbitLocalDataSource(
         isDesc: Boolean,
         onSuccess: (List<UpbitTicker>) -> Unit,
         onFail: (Throwable) -> Unit
-    ) = withContext(ioDispatcher) {
+    ) = withContext(Dispatchers.IO) {
         val sortedList = when (sortType) {
             "market" -> {
                 if (isDesc) upbitTickerDao.sortMarketByDESC()
@@ -40,7 +38,9 @@ class UpbitLocalDataSource(
             }
             else -> listOf()
         }
-        if (sortedList.isNullOrEmpty()) onFail(IllegalStateException("Sort fail"))
-        else onSuccess(sortedList)
+        withContext(Dispatchers.Main) {
+            if (sortedList.isNullOrEmpty()) onFail(IllegalStateException("Sort fail"))
+            else onSuccess(sortedList)
+        }
     }
 }

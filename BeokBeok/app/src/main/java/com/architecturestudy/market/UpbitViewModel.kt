@@ -13,12 +13,13 @@ class UpbitViewModel(
     private val upBitRepository: UpbitRepository
 ) : BaseViewModel() {
 
+    private var isDESC: Boolean = false
+
     val marketPriceList = MutableLiveData<List<Map<String, String>>>()
     val errMsg = MutableLiveData<Throwable>()
     val isSortByDESC = MutableLiveData<Boolean>()
     val selectedSortTypeList = MutableLiveData<List<Boolean>>()
         .apply { listOf(false, false, false, false) }
-    private var isDESC: Boolean = false
 
     fun showMarketPrice(prefix: String) = viewModelScope.launch {
         upBitRepository.getMarketPrice(

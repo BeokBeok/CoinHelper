@@ -3,21 +3,19 @@ package com.architecturestudy.data.source.remote
 import com.architecturestudy.common.MarketTypes
 import com.architecturestudy.data.UpbitTicker
 import com.architecturestudy.data.source.UpbitDataSource
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 
 class UpbitRemoteDataSource(
-    private val retrofit: UpbitRemoteService,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val retrofit: UpbitRemoteService
 ) : UpbitDataSource.Remote {
 
     override suspend fun getMarketPrice(
         prefix: String,
         onSuccess: (List<UpbitTicker>) -> Unit,
         onFail: (Throwable) -> Unit
-    ) = withContext(ioDispatcher) {
+    ) = withContext(Dispatchers.IO) {
         val marketList = async {
             retrofit.getMarkets()
         }
