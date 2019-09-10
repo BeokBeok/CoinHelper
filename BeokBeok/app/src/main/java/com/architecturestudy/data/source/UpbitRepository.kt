@@ -1,7 +1,6 @@
 package com.architecturestudy.data.source
 
 import com.architecturestudy.data.UpbitTicker
-import io.reactivex.disposables.Disposable
 
 class UpbitRepository(
     private val upbitLocalDataSource: UpbitDataSource.Local,
@@ -24,11 +23,11 @@ class UpbitRepository(
         onFail
     )
 
-    override fun getMarketPrice(
+    override suspend fun getMarketPrice(
         prefix: String,
         onSuccess: (List<UpbitTicker>) -> Unit,
         onFail: (Throwable) -> Unit
-    ): Disposable = upbitRemoteDataSource.getMarketPrice(
+    ) = upbitRemoteDataSource.getMarketPrice(
         prefix,
         onSuccess,
         onFail

@@ -3,6 +3,7 @@ package com.architecturestudy.market
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.architecturestudy.base.BaseViewModel
+import com.architecturestudy.data.UpbitTicker
 import com.architecturestudy.data.source.UpbitRepository
 import com.architecturestudy.util.NumberFormatter
 import com.architecturestudy.util.RxEventBus
@@ -19,16 +20,12 @@ class UpbitViewModel(
         .apply { listOf(false, false, false, false) }
     private var isDESC: Boolean = false
 
-    fun showMarketPrice(prefix: String) {
+    fun showMarketPrice(prefix: String) = viewModelScope.launch {
         upBitRepository.getMarketPrice(
             prefix,
             onSuccess = {
-                viewModelScope.launch {
-                    for (element in it) {
-                        upBitRepository.saveTicker(element)
-                    }
-                    marketPriceList.value = NumberFormatter.convertTo(it)
-                }
+                saveTickerInRoom(it)
+                marketPriceList.value = NumberFormatter.convertTo(it)
             },
             onFail = {
                 errMsg.value = it
@@ -58,6 +55,12 @@ class UpbitViewModel(
             "trade_price" -> selectedSortTypeList.value = listOf(false, true, false, false)
             "signed_change_rate" -> selectedSortTypeList.value = listOf(false, false, true, false)
             "acc_trade_price_24h" -> selectedSortTypeList.value = listOf(false, false, false, true)
+        }
+    }
+
+    private fun saveTickerInRoom(tickerList: List<UpbitTicker>) = viewModelScope.launch {
+        for (element in tickerList) {
+            upBitRepository.saveTicker(element)
         }
     }
 }

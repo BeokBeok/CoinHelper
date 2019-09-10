@@ -1,7 +1,6 @@
 package com.architecturestudy.data.source
 
 import com.architecturestudy.data.UpbitTicker
-import io.reactivex.disposables.Disposable
 
 interface UpbitDataSource {
     interface Local {
@@ -16,11 +15,11 @@ interface UpbitDataSource {
     }
 
     interface Remote {
-        fun getMarketPrice(
+        suspend fun getMarketPrice(
             prefix: String,
             onSuccess: (List<UpbitTicker>) -> Unit,
             onFail: (Throwable) -> Unit
-        ): Disposable
+        )
     }
 
 }
