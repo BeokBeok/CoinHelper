@@ -4,7 +4,6 @@ import com.architecturestudy.common.MarketTypes
 import com.architecturestudy.data.UpbitTicker
 import com.architecturestudy.data.source.UpbitDataSource
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 
 class UpbitRemoteDataSource(
@@ -15,13 +14,12 @@ class UpbitRemoteDataSource(
         prefix: String,
         onSuccess: (List<UpbitTicker>) -> Unit,
         onFail: (Throwable) -> Unit
-    ) = withContext(Dispatchers.IO) {
-        val marketList = async {
-            retrofit.getMarkets()
-        }
-        val tickerList = async {
-            retrofit.getTicker(
-                marketList.await()
+    ) {
+        var tickerList = listOf<UpbitTicker>()
+        withContext(Dispatchers.IO) {
+            val marketList = retrofit.getMarkets()
+            tickerList = retrofit.getTicker(
+                marketList
                     .asSequence()
                     .filter {
                         enumValues<MarketTypes>().any { data ->
@@ -34,7 +32,7 @@ class UpbitRemoteDataSource(
             )
         }
         withContext(Dispatchers.Main) {
-            tickerList.await().run {
+            tickerList.run {
                 if (isNullOrEmpty()) onFail(IllegalStateException("Data is empty"))
                 else onSuccess(this)
             }
