@@ -1,9 +1,9 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("com.android.application")
-    id("kotlin-android")
-    id("kotlin-kapt")
+    id(Plugins.ANDROID_APPLICATION)
+    id(Plugins.KOTLIN_ANDROID)
+    id(Plugins.KOTLIN_KAPT)
 }
 
 android {
@@ -43,39 +43,30 @@ dependencies {
             )
         )
     )
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.50")
+    implementation(Libraries.Default.KOTLIN_STDLIB_JDK7)
+    implementation(Libraries.Default.MATERIAL)
+    implementation(Libraries.Default.CONSTRAINT_LAYOUT)
 
-    // AndroidX
-    implementation("com.google.android.material:material:1.0.0")
-    implementation("androidx.constraintlayout:constraintlayout:1.1.3")
+    androidTestImplementation(Libraries.Test.JUNIT)
+    androidTestImplementation(Libraries.Test.ESPRESSO)
+    testImplementation(Libraries.Test.KOTLIN)
 
-    // Test Library
-    androidTestImplementation("androidx.test.ext:junit:1.1.1")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.2.0")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.3.50")
+    implementation(Libraries.Retrofit.MAIN)
+    implementation(Libraries.Retrofit.CONVERT_GSON)
+    implementation(Libraries.Retrofit.LOGGING_INTERCEPTOR)
 
-    // Retrofit
-    implementation("com.squareup.retrofit2:retrofit:2.6.1")
-    implementation("com.squareup.retrofit2:converter-gson:2.6.1")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.1.0")
+    implementation(Libraries.RxJava.MAIN)
+    implementation(Libraries.RxJava.RXANDROID)
 
-    // Rxjava
-    implementation("io.reactivex.rxjava2:rxjava:2.2.11")
-    implementation("io.reactivex.rxjava2:rxandroid:2.1.1")
+    implementation(Libraries.LifeCycle.EXTENSIONS)
+    implementation(Libraries.LifeCycle.VIEWMODEL)
 
-    // LifeCycle
-    implementation("androidx.lifecycle:lifecycle-extensions:2.1.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0")
+    implementation(Libraries.Room.RUNTIME)
+    implementation(Libraries.Room.KTX)
+    kapt(Libraries.Room.COMPILER)
 
-    // Room
-    implementation("androidx.room:room-runtime:2.1.0")
-    implementation("androidx.room:room-ktx:2.1.0")
-    kapt("androidx.room:room-compiler:2.1.0")
+    implementation(Libraries.Koin.ANDROID)
+    implementation(Libraries.Koin.VIEWMODEL)
 
-    // Koin
-    implementation("org.koin:koin-android:2.0.1")
-    implementation("org.koin:koin-android-viewmodel:2.0.1")
-
-    // Coroutine
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.1")
+    implementation(Libraries.Coroutine.CORE)
 }
