@@ -38,7 +38,7 @@ class UpbitRemoteDataSource(
         }
         withContext(Dispatchers.Main) {
             tickerList.run {
-                if (isNullOrEmpty()) onFail(IllegalStateException("Data is empty"))
+                if (isNullOrEmpty()) onFail(IllegalStateException("$prefix Data is empty"))
                 else onSuccess(this)
             }
         }
