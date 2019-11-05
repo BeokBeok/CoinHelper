@@ -1,4 +1,4 @@
-# GoogryAndroidArchitectureStudy
+# CoinHelper
 
 ## 스터디장
 - 정석준 [sjjeong](https://github.com/sjjeong)
