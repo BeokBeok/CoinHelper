@@ -5,6 +5,7 @@ import com.architecturestudy.data.UpbitTicker
 import com.architecturestudy.data.source.UpbitDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 
 class UpbitRemoteDataSource(
     private val retrofit: UpbitRemoteService
@@ -18,18 +19,22 @@ class UpbitRemoteDataSource(
         var tickerList = listOf<UpbitTicker>()
         withContext(Dispatchers.IO) {
             val marketList = retrofit.getMarkets()
-            tickerList = retrofit.getTicker(
-                marketList
-                    .asSequence()
-                    .filter {
-                        enumValues<MarketTypes>().any { data ->
-                            data.name == prefix
+            tickerList = try {
+                retrofit.getTicker(
+                    marketList
+                        .asSequence()
+                        .filter {
+                            enumValues<MarketTypes>().any { data ->
+                                data.name == prefix
+                            }
                         }
-                    }
-                    .filter { data -> data.market.startsWith(prefix) }
-                    .map { data -> data.market }
-                    .toList()
-            )
+                        .filter { data -> data.market.startsWith(prefix) }
+                        .map { data -> data.market }
+                        .toList()
+                )
+            } catch (e: HttpException) {
+                listOf()
+            }
         }
         withContext(Dispatchers.Main) {
             tickerList.run {
