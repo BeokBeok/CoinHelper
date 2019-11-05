@@ -36,6 +36,6 @@ abstract class BaseFragment<VDB : ViewDataBinding, VM : BaseViewModel>(
     fun showToast(msg: String?) = Toast.makeText(
         activity,
         msg,
-        Toast.LENGTH_SHORT
+        Toast.LENGTH_LONG
     ).show()
 }
