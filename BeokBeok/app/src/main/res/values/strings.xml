@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name" translatable="false">ArchitectureStudy</string>
+    <string name="market">Coin name</string>
+    <string name="tradePrice">Current price</string>
+    <string name="signedChangeRate">Net change</string>
+    <string name="accTradePrice24h">Trading value</string>
+    <string name="sort">Sort</string>
+</resources>
